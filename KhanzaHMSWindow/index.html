@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Health & Speaking Check</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-+bZ6k8yY9V6x7r0n0qk0rQ1K6Q5p6/2fY3Z6Y5Y5Y5Y=" crossorigin="anonymous"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .card { border: 1px solid #ddd; padding: 16px; border-radius: 6px; max-width: 420px; }
+    .result { margin-top: 12px; padding: 10px; border-radius: 4px; }
+    .ok { background: #e6ffed; border: 1px solid #b7f0c6; color: #0a6b2b; }
+    .warn { background: #fff4e6; border: 1px solid #ffd8a8; color: #663c00; }
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-labelledby="title">
+    <h2 id="title">Quick Health & Speaking Check</h2>
+
+    <form id="checkForm">
+      <label>
+        <input type="checkbox" id="healthy" />
+        Feeling healthy
+      </label>
+      <br/>
+      <label>
+        <input type="checkbox" id="canSpeak" />
+        Can speak / communicate
+      </label>
+      <br/><br/>
+      <button type="button" id="evaluate">Check</button>
+    </form>
+
+    <div id="message" class="result" aria-live="polite"></div>
+  </div>
+
+  <script>
+    $(function(){
+      $('#evaluate').on('click', function(){
+        var healthy = $('#healthy').is(':checked');
+        var canSpeak = $('#canSpeak').is(':checked');
+        var $msg = $('#message');
+
+        if (healthy && canSpeak) {
+          $msg
+            .removeClass('warn').addClass('ok')
+            .text('Looks good — you report feeling healthy and able to speak.');
+        } else if (!healthy && canSpeak) {
+          $msg
+            .removeClass('ok').addClass('warn')
+            .html('You can speak but do not feel healthy. If you need guidance, see the WHO: <a href="https://www.who.int" target="_blank" rel="noopener">who.int</a>');
+        } else if (healthy && !canSpeak) {
+          $msg
+            .removeClass('warn').addClass('ok')
+            .text('You report feeling healthy but cannot speak. If this is urgent, seek immediate help or contact a caregiver.');
+        } else {
+          $msg
+            .removeClass('ok').addClass('warn')
+            .html('You report not feeling healthy and cannot speak. If this is an emergency please call local emergency services. For general guidance, see WHO: <a href="https://www.who.int" target="_blank" rel="noopener">who.int</a>');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
